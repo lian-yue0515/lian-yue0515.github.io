@@ -1,0 +1,12 @@
+const root=document.documentElement;
+const themeButton=document.querySelector('.theme-toggle');
+themeButton.addEventListener('click',()=>{const next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;try{localStorage.setItem('theme',next)}catch(e){}});
+const menuButton=document.querySelector('.menu-toggle');
+const links=document.querySelector('.nav-links');
+menuButton.addEventListener('click',()=>{const open=links.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open))});
+links.addEventListener('click',e=>{if(e.target.matches('a')){links.classList.remove('open');menuButton.setAttribute('aria-expanded','false')}});
+const sections=[...document.querySelectorAll('main section[id]')];
+const navLinks=[...document.querySelectorAll('.nav-links a')];
+const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.hash==='#'+entry.target.id))}})},{rootMargin:'-25% 0px -65%'});
+sections.forEach(section=>observer.observe(section));
+document.querySelector('#year').textContent=new Date().getFullYear();
